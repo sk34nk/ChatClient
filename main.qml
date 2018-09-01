@@ -81,29 +81,60 @@ ApplicationWindow {
             // Send message
             Button {
                 id: sendButton
+                x: 256
+                y: 462
                 text: qsTr("SEND")
-                anchors.verticalCenterOffset: 219
+                anchors.verticalCenterOffset: 227
                 anchors.horizontalCenterOffset: 121
-                anchors.centerIn: parent
-                width: 78
-                height: 42
+                width: 64
+                height: 18
 
                 onClicked: {
-                    //dialogWindow.show()  // Открываем первое окно
-                    //startWindow.hide()   // Скрываем основное окно
+
                 }
             }
 
             TextInput {
                 id: message
-                x: 0
-                y: 438
-                width: 236
-                height: 42
+                x: 8
+                y: 462
+                width: 251
+                height: 18
                 text: qsTr("")
                 horizontalAlignment: Text.AlignLeft
                 cursorVisible: true
                 font.pixelSize: 12
+            }
+
+            ListView {
+                id: listView
+                x: 0
+                y: 0
+                width: 320
+                height: 456
+                model: ListModel {
+
+                }
+                delegate: Item {
+                    x: 5
+                    width: 80
+                    height: 40
+                    Row {
+                        id: row1
+                        Rectangle {
+                            width: 40
+                            height: 40
+                            color: colorCode
+                        }
+
+                        Text {
+                            text: name
+                            font.bold: true
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        spacing: 10
+                    }
+                }
             }
         }
     }
