@@ -7,6 +7,7 @@ ApplicationWindow {
     visible: true
     width: 320
     height: 480
+    color: "#ffffff"
     title: qsTr("Team Bot")
 
     Rectangle {
@@ -17,34 +18,64 @@ ApplicationWindow {
 
         // Open dialog
         Button {
+            id: start
             text: qsTr("START")
+            leftPadding: 6
             anchors.verticalCenterOffset: 303
             anchors.horizontalCenterOffset: 172
             anchors.centerIn: parent
             width: 100
             height: 42
 
-            onClicked: {
+            contentItem: Text {
+                text: start.text
+                font: start.font
+                opacity: enabled ? 1.0 : 0.3
+                color: color.down ? "#ffffff" : "#00009b"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
 
+            background: Rectangle {
+                implicitWidth: 100
+                implicitHeight: 40
+                opacity: enabled ? 1 : 0.3
+                border.color: start.down ? "#ffffff" : "#00009b"
+                border.width: 1
+            }
+
+            onClicked: {
                 gridDialog.visible = true
             }
         }
 
-        TextInput {
-            id: userNickname
-            x: 116
-            y: 238
-            width: 113
-            height: 20
-            text: qsTr("")
-            anchors.verticalCenterOffset: 232
-            anchors.horizontalCenterOffset: 173
-            anchors.centerIn: parent
-            renderType: Text.QtRendering
-            horizontalAlignment: Text.AlignHCenter
-            cursorVisible: true
-            font.pixelSize: 12
-        }
+        Rectangle {
+                x: 116
+                y: 219
+                width: 113
+                height: 20
+                border.width: 1
+                border.color: "#00009b"
+            }
+
+            TextInput {
+                id: userNickname
+                x: 116
+                y: 238
+                width: 113
+                height: 20
+                color: "#00009b"
+                text: qsTr("")
+                anchors.verticalCenterOffset: 232
+                anchors.horizontalCenterOffset: 173
+                anchors.centerIn: parent
+                renderType: Text.QtRendering
+                horizontalAlignment: Text.AlignHCenter
+                cursorVisible: true
+                font.pixelSize: 12
+                focus: true
+            }
 
         Text {
             id: text1
@@ -52,7 +83,9 @@ ApplicationWindow {
             y: 151
             width: 93
             height: 18
+            color: "#00009b"
             text: qsTr("Enter your name:")
+            styleColor: "#00009b"
             anchors.verticalCenterOffset: 170
             anchors.horizontalCenterOffset: 173
             anchors.centerIn: parent
@@ -75,30 +108,31 @@ ApplicationWindow {
         Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.column: 1
-            Layout.row: 1
+            Layout.column: 2
+            Layout.row: 2
 
-            // Send message
-            Button {
-                id: sendButton
-                x: 256
-                y: 462
-                text: qsTr("SEND")
-                anchors.verticalCenterOffset: 227
-                anchors.horizontalCenterOffset: 121
-                width: 64
-                height: 18
+                // Send message
 
-                onClicked: {
+                Button {
+                    id: sendButton
+                    x: 256
+                    y: 462
+                    text: qsTr("SEND")
+                    anchors.verticalCenterOffset: 227
+                    anchors.horizontalCenterOffset: 121
+                    width: 64
+                    height: 18
 
+                    onClicked: {
+
+                    }
                 }
-            }
 
             TextInput {
                 id: message
-                x: 8
+                x: 0
                 y: 462
-                width: 251
+                width: 259
                 height: 18
                 text: qsTr("")
                 horizontalAlignment: Text.AlignLeft
