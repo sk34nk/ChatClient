@@ -16,7 +16,32 @@ ApplicationWindow {
         Layout.fillHeight: true
         Layout.fillWidth: true
         Layout.column: 1
-        Layout.row: 2
+        Layout.row: 1
+
+        property string user_Nickname
+        property string bot_Nickname
+
+        function submit() {
+            //chatserver.sendMessage(messageInput.text, userName, targetName);
+            append(user_Nickname, messageInput.text);
+            messageInput.text = "";
+        }
+
+        function receiveMessage(from, mssg) {
+            append(from, mssg);
+        }
+
+        function scroll()            {
+            if (chatTranscript.contentHeight>dialogView.height) {
+                   dialogView.flickableItem.contentY = chatTranscript.contentHeight-dialogView.height;
+            }
+        }
+
+        function append(sender, mssg) {
+            chatTranscript.insert(chatTranscript.length, "<span style='color: #00009b" + ";font-weight:bold;'>"
+                 + sender +": </span><span style='color: #00009b'>" + mssg +"</span><br>");
+            scroll();
+        }
 
         Rectangle {
             id: titleRectangle
@@ -83,6 +108,10 @@ ApplicationWindow {
                     border.color: "#00009b"
                     radius: 7
                 }
+
+                onClicked: {
+                    Qt.quit()
+                }
             }
         }
 
@@ -129,6 +158,7 @@ ApplicationWindow {
                 }
 
                 onClicked: {
+                    mainRectangle.user_Nickname = userNickname.text
                     gridDialog.visible = true
                 }
             }
@@ -189,7 +219,6 @@ ApplicationWindow {
             anchors.rightMargin: 0
             visible: false
             anchors.fill: parent
-
             rows: 1
             columns: 1
 
@@ -206,9 +235,9 @@ ApplicationWindow {
                 Button {
                     id: sendButton
                     x: 276
-                    y: 440
+                    y: 436
                     width: 44
-                    height: 20
+                    height: 26
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 0
                     anchors.right: parent.right
@@ -220,7 +249,7 @@ ApplicationWindow {
                         implicitHeight: 20
                         opacity: enabled ? 1 : 0.3
                         color: "#00009b"
-                        //anchors.fill: parent
+                        anchors.fill: parent
 
                         Canvas {
                             id: triangle
@@ -230,23 +259,23 @@ ApplicationWindow {
                                 ctx.fillStyle = "#ffffff";
                                 ctx.beginPath();
                                 ctx.moveTo(12,3);
-                                ctx.lineTo(12,17);
-                                ctx.lineTo(32,10);
+                                ctx.lineTo(12,23);
+                                ctx.lineTo(32,13);
                                 ctx.fill();
                             }
                         }
                     }
 
                     onClicked: {
-
+                        if(messageInput.text != "")mainRectangle.submit();
                     }
                 }
 
                 Rectangle {
                     id: messageRectangle
-                    y: 219
+                    y: 436
                     width: 276
-                    height: 20
+                    height: 25
                     anchors.left: parent.left
                     anchors.leftMargin: 0
                     anchors.bottom: parent.bottom
@@ -255,11 +284,12 @@ ApplicationWindow {
                     border.color: "#00009b"
                 }
 
-                TextInput {
-                    id: message
-                    y: 443
+                TextField {
+                    id: messageInput
+                    y: 436
                     width: 276
-                    height: 20
+                    height: 25
+                    color: "#00009b"
                     text: qsTr("")
                     anchors.left: parent.left
                     anchors.leftMargin: 0
@@ -271,41 +301,32 @@ ApplicationWindow {
                     focus: true
                 }
 
-                ListView {
-                    id: listMessage
+                ScrollView {
+                    id: dialogView
                     x: 0
                     y: 0
                     width: 320
-                    height: 441
-                    model: ListModel {
-
-                    }
-                    delegate: Item {
-                        x: 5
-                        width: 80
-                        height: 40
-                        Row {
-                            id: row1
-                            Rectangle {
-                                width: 40
-                                height: 40
-                                color: colorCode
-                            }
-
-                            Text {
-                                text: name
-                                font.bold: true
-                                anchors.verticalCenter: parent.verticalCenter
-                            }
-                            spacing: 10
-                        }
-                    }
+                    height: 430
+                    visible: true
                 }
+                TextEdit {
+                    id: chatTranscript
+                    x: 0
+                    y: 0
+                    width: 320
+                    height: 430
+                    font.pixelSize: 12
+                    readOnly: true
+                    wrapMode: TextEdit.Wrap
+                    textFormat: Text.RichText
+                    text: ""
+                }
+
             }
         }
     }
 }
 /*##^## Designer {
-    D{i:263;anchors_x:320;anchors_y:19}D{i:264;anchors_y:3}D{i:283;anchors_height:20;anchors_width:44}
+    D{i:263;anchors_x:320;anchors_y:19}D{i:264;anchors_y:3}
 }
  ##^##*/
