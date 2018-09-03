@@ -20,15 +20,31 @@ ApplicationWindow {
 
         property string user_Nickname
         property string bot_Nickname
+        property string response_text
 
         function submit() {
-            //chatserver.sendMessage(messageInput.text, userName, targetName);
             append(user_Nickname, messageInput.text);
+            sendMessage(messageInput.text);
             messageInput.text = "";
         }
 
-        function receiveMessage(from, mssg) {
-            append(from, mssg);
+        function sendMessage(mssg) {
+            var request = new XMLHttpRequest()
+            var url = encodeURIComponent("http://host1.demoproject2f.techcd.ru/chatbot/conversation_start.php")
+            var params = encodeURIComponent("bot_id=2&say=%1&format=xml&Name=%2").arg(encodeURIComponent(mssg)).arg(encodeURIComponent(mainRectangle.user_Nickname))
+            request.open("POST", url, true)
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log("XML:", request.responseXML)
+                        append(bot_Nickname, response_text);
+                    } else {
+                        console.log("HTTP:", request.status, request.statusText)
+                    }
+                }
+            }
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+            request.send(params)
         }
 
         function scroll()            {
@@ -326,6 +342,7 @@ ApplicationWindow {
         }
     }
 }
+
 /*##^## Designer {
     D{i:263;anchors_x:320;anchors_y:19}D{i:264;anchors_y:3}
 }
